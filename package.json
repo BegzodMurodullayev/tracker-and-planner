@@ -1,0 +1,37 @@
+{
+    "name":  "ultimate-productivity-os",
+    "version":  "1.0.0",
+    "description":  "O'zbek tilidagi dark mode planner, muddatlar va fokus tizimi",
+    "main":  "electron.js",
+    "type":  "module",
+    "scripts":  {
+                    "start":  "electron .",
+                    "smoke":  "set REJA_SMOKE=1&& electron . && type smoke-result.json",
+                    "build":  "set CSC_IDENTITY_AUTO_DISCOVERY=false&& set ELECTRON_BUILDER_DISABLE_WIN_CODE_SIGNING=true&& set ELECTRON_BUILDER_SKIP_WINCODE_SIGN_DOWNLOAD=true&& electron-builder --win --x64"
+                },
+    "devDependencies":  {
+                            "electron":  "^30.0.0",
+                            "electron-builder":  "^24.13.3"
+                        },
+    "build":  {
+                  "appId":  "com.rejaplus.desktop",
+                  "productName":  "Reja+",
+                  "asar":  true,
+                  "files":  [
+                                "index.html",
+                                "electron.js",
+                                "preload.cjs",
+                                "src/**/*",
+                                "assets/**/*",
+                                "package.json"
+                            ],
+                  "win":  {
+                              "target":  [
+                                             "nsis",
+                                             "portable"
+                                         ]
+                          }
+              },
+    "author":  "Reja+ jamoasi"
+}
+

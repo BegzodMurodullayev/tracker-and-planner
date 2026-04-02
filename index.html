@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self';" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reja+ | O'zbek planner</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">R+</div>
+          <div>
+            <span class="eyebrow">Shaxsiy boshqaruv</span>
+            <h2>Reja+</h2>
+            <p>Vazifa, muddat va fokus uchun kuchli dark-mode yordamchi</p>
+          </div>
+        </div>
+
+        <nav class="nav">
+          <button type="button" class="nav-item active" data-route="bosh">Bosh sahifa</button>
+          <button type="button" class="nav-item" data-route="vazifalar">Vazifalar</button>
+          <button type="button" class="nav-item" data-route="muddatlar">Muddatlar</button>
+          <button type="button" class="nav-item" data-route="fokus">Fokus rejimi</button>
+        </nav>
+
+        <section class="sidebar-panel">
+          <p class="sidebar-label">Bugungi qisqa ko'rinish</p>
+          <div class="mini-card">
+            <span>Bugungi vazifalar</span>
+            <strong id="todayTaskCount">0</strong>
+          </div>
+          <div class="mini-card">
+            <span>Yaqin muddatlar</span>
+            <strong id="upcomingDeadlineCount">0</strong>
+          </div>
+        </section>
+
+        <div class="sidebar-note" id="sidebarFocusHint">Bugun bitta chuqur fokus sessiyasi bilan boshlang.</div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar surface-card">
+          <div class="topbar-copy">
+            <span class="eyebrow" id="routeEyebrow">Bosh sahifa</span>
+            <h1 id="routeTitle">Rejalaringiz boshqaruv ostida</h1>
+            <p id="routeDescription">Kunlik vazifalar, muddatlar va fokus sessiyalarini bir joydan boshqaring.</p>
+          </div>
+
+          <div class="topbar-actions">
+            <button type="button" class="ghost-button" id="quickFocus">Fokusni boshlash</button>
+            <button type="button" class="primary-button" id="newTaskShortcut">Vazifa qo'shish</button>
+          </div>
+        </header>
+
+        <section class="page active" data-page="bosh">
+          <div class="dashboard-layout">
+            <article class="hero-card surface-card">
+              <span class="eyebrow">Kun rejasi</span>
+              <h2>Bugungi ishlar, aniq yo'nalish va tinch fokus</h2>
+              <p>Har bir vazifa uchun tartibli oqim, alohida muddatlar sahifasi va chalg'imasdan ishlash uchun fokus rejimi.</p>
+              <div class="hero-actions">
+                <button type="button" class="primary-button" id="heroTaskButton">Yangi vazifa</button>
+                <button type="button" class="ghost-button" id="heroDeadlineButton">Muddat qo'shish</button>
+              </div>
+            </article>
+
+            <div class="stats-grid">
+              <article class="metric-card accent-cyan">
+                <span>Jami vazifalar</span>
+                <strong id="totalTaskCount">0</strong>
+              </article>
+              <article class="metric-card accent-blue">
+                <span>Faol vazifalar</span>
+                <strong id="activeTaskCount">0</strong>
+              </article>
+              <article class="metric-card accent-green">
+                <span>Bajarilgan</span>
+                <strong id="doneTaskCount">0</strong>
+              </article>
+              <article class="metric-card accent-rose">
+                <span>Muddati o'tgan</span>
+                <strong id="overdueTaskCount">0</strong>
+              </article>
+            </div>
+
+            <div class="split-grid">
+              <article class="surface-card list-panel">
+                <div class="section-header">
+                  <div>
+                    <span class="eyebrow">Faol oqim</span>
+                    <h2>Ustuvor vazifalar</h2>
+                    <p>Bugun va yaqin kunlar uchun eng muhim vazifalar.</p>
+                  </div>
+                  <button type="button" class="link-button" id="viewAllTasks">Vazifalarga o'tish</button>
+                </div>
+                <div id="homeTaskPreview" class="stack-list"></div>
+              </article>
+
+              <article class="surface-card list-panel">
+                <div class="section-header">
+                  <div>
+                    <span class="eyebrow">Muddat nazorati</span>
+                    <h2>Yaqin muddatlar</h2>
+                    <p>Yaqinlashayotgan va nazorat talab qiladigan muddatlar.</p>
+                  </div>
+                  <button type="button" class="link-button" id="viewAllDeadlines">Muddatlarga o'tish</button>
+                </div>
+                <div id="homeDeadlinePreview" class="stack-list"></div>
+              </article>
+            </div>
+
+            <article class="surface-card focus-summary-card">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Fokus ko'rinishi</span>
+                  <h2>Chuqur ish statistikasi</h2>
+                  <p>Fokus minutlari, sessiyalar va oxirgi kunlar natijasi.</p>
+                </div>
+              </div>
+
+              <div class="focus-stats-grid compact-grid">
+                <div class="metric-card subdued">
+                  <span>Jami fokus</span>
+                  <strong id="focusMinutesTotal">0 daq.</strong>
+                </div>
+                <div class="metric-card subdued">
+                  <span>Jami sessiyalar</span>
+                  <strong id="focusSessionTotal">0</strong>
+                </div>
+                <div class="metric-card subdued">
+                  <span>Bajarilish darajasi</span>
+                  <strong id="homeCompletionRate">0%</strong>
+                </div>
+              </div>
+
+              <div id="homeFocusHistory" class="stack-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" data-page="vazifalar">
+          <div class="page-grid">
+            <article class="surface-card form-card">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Vazifa yaratish</span>
+                  <h2>Kun tartibiga yangi vazifa qo'shing</h2>
+                  <p>Nom, izoh, ustuvorlik va muddat bilan to'liq vazifa yozing.</p>
+                </div>
+              </div>
+
+              <form id="taskForm" class="form-grid">
+                <label class="field field-span-2">
+                  <span>Vazifa nomi</span>
+                  <input type="text" id="taskTitle" placeholder="Masalan: Loyiha taqdimotini tayyorlash" required />
+                </label>
+
+                <label class="field field-span-2">
+                  <span>Qisqa izoh</span>
+                  <input type="text" id="taskDescription" placeholder="Vazifa haqida qisqacha yozing" />
+                </label>
+
+                <label class="field">
+                  <span>Kategoriya</span>
+                  <select id="taskCategory">
+                    <option value="Umumiy">Umumiy</option>
+                    <option value="Ish">Ish</option>
+                    <option value="O'qish">O'qish</option>
+                    <option value="Shaxsiy">Shaxsiy</option>
+                  </select>
+                </label>
+
+                <label class="field">
+                  <span>Ustuvorlik</span>
+                  <select id="taskPriority">
+                    <option value="low">Past</option>
+                    <option value="medium" selected>O'rta</option>
+                    <option value="high">Yuqori</option>
+                  </select>
+                </label>
+
+                <label class="field field-span-2">
+                  <span>Muddat</span>
+                  <input type="datetime-local" id="taskDeadline" step="1" />
+                </label>
+
+                <div class="form-actions field-span-2">
+                  <button type="submit" class="primary-button" id="taskSubmit">Vazifa qo'shish</button>
+                  <button type="button" class="ghost-button" id="taskCancel" hidden>Bekor qilish</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="surface-card list-card">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Vazifalar ro'yxati</span>
+                  <h2>Barcha vazifalar</h2>
+                  <p id="taskCollectionMeta">Hozircha vazifalar mavjud emas.</p>
+                </div>
+
+                <div class="toolbar">
+                  <input id="taskSearch" type="text" placeholder="Vazifa qidiring..." />
+                  <select id="taskStatusFilter">
+                    <option value="all">Barcha holatlar</option>
+                    <option value="active">Faol</option>
+                    <option value="done">Bajarilgan</option>
+                    <option value="overdue">Muddati o'tgan</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="taskList" class="stack-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" data-page="muddatlar">
+          <div class="page-grid">
+            <article class="surface-card form-card">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Muddat yaratish</span>
+                  <h2>Alohida muddat qo'shish</h2>
+                  <p>Vazifadan mustaqil deadline yozib, alohida ro'yxatda nazorat qiling.</p>
+                </div>
+              </div>
+
+              <form id="deadlineForm" class="form-grid">
+                <label class="field field-span-2">
+                  <span>Muddat nomi</span>
+                  <input type="text" id="deadlineTitle" placeholder="Masalan: Soliq hisobotini topshirish" required />
+                </label>
+
+                <label class="field field-span-2">
+                  <span>Sana va vaqt</span>
+                  <input type="datetime-local" id="deadlineDate" step="1" required />
+                </label>
+
+                <label class="field field-span-2">
+                  <span>Izoh</span>
+                  <input type="text" id="deadlineNote" placeholder="Qisqa eslatma yozing" />
+                </label>
+
+                <div class="form-actions field-span-2">
+                  <button type="submit" class="primary-button" id="deadlineSubmit">Muddat qo'shish</button>
+                  <button type="button" class="ghost-button" id="deadlineCancel" hidden>Bekor qilish</button>
+                </div>
+              </form>
+            </article>
+
+            <article class="surface-card list-card">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Deadline nazorati</span>
+                  <h2>Muddatlar ro'yxati</h2>
+                  <p id="deadlineCollectionMeta">Muddatlar hali qo'shilmagan.</p>
+                </div>
+              </div>
+
+              <div id="deadlineList" class="stack-list"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="page" data-page="fokus">
+          <div class="focus-layout">
+            <article class="surface-card focus-stage">
+              <span class="eyebrow">Fokus taymeri</span>
+              <div class="focus-orb">
+                <div class="focus-orb-inner">
+                  <div class="timer" id="focusTimer">25:00</div>
+                  <p id="focusPhase">Ish vaqti</p>
+                </div>
+              </div>
+
+              <div class="timer-actions">
+                <button type="button" class="primary-button" id="focusStart">Boshlash</button>
+                <button type="button" class="ghost-button" id="focusStop">To'xtatish</button>
+                <button type="button" class="ghost-button" id="focusReset">Qayta sozlash</button>
+              </div>
+
+              <div class="preset-row">
+                <button type="button" class="chip-button" id="presetClassic">Klassik 25/5</button>
+                <button type="button" class="chip-button" id="presetDeep">Chuqur 50/10</button>
+              </div>
+            </article>
+
+            <article class="surface-card focus-settings-card">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Rejim sozlamalari</span>
+                  <h2>Pomodoro boshqaruvi</h2>
+                  <p>Ish va dam olish oralig'ini o'zingizga moslashtiring.</p>
+                </div>
+              </div>
+
+              <div class="focus-stats-grid">
+                <div class="metric-card subdued">
+                  <span>Bugungi fokus</span>
+                  <strong id="focusTodayMinutes">0 daq.</strong>
+                </div>
+                <div class="metric-card subdued">
+                  <span>Bugungi sessiyalar</span>
+                  <strong id="focusTodaySessions">0</strong>
+                </div>
+              </div>
+
+              <div class="form-grid compact-form">
+                <label class="field">
+                  <span>Ish davomiyligi</span>
+                  <input type="number" id="workMinutes" min="15" max="90" value="25" />
+                </label>
+
+                <label class="field">
+                  <span>Dam olish</span>
+                  <input type="number" id="breakMinutes" min="3" max="30" value="5" />
+                </label>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="ghost-button" id="applyFocus">Davomiylikni qo'llash</button>
+              </div>
+            </article>
+
+            <article class="surface-card list-panel focus-history-panel">
+              <div class="section-header">
+                <div>
+                  <span class="eyebrow">Oxirgi kunlar</span>
+                  <h2>Fokus tarixi</h2>
+                  <p>So'nggi sessiyalar bo'yicha jamlangan natijalar.</p>
+                </div>
+              </div>
+
+              <div id="focusHistoryList" class="stack-list"></div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
+
+
